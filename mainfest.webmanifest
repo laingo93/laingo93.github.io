@@ -1,0 +1,22 @@
+{
+    "name": "The Forge",
+    "short_name": "Forge",
+ 
+    "description": "The Forge Kettlebell APp",
+  
+    "scope": "/laingo93.github.io/",
+    "start_url": "/laingo93.github.io/",
+  
+    "background_color": "#ffffff",
+    "theme_color": "#ffffff",
+  
+    "display": "standalone", 
+    
+    "icons": [
+        {
+          "src": "/laingo93.github.io/img/icon.png",
+          "type": "image/png",
+          "sizes": "700x700"
+        }
+    ]
+  }

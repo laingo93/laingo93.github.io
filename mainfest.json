@@ -1,21 +1,30 @@
 {
+    "id": "/",
+    "start_url": "/",
+    "display": "standalone", 
+    "scope": "/",
     "name": "The Forge",
     "short_name": "Forge",
  
     "description": "The Forge Kettlebell App",
   
-    "start_url": "/",
+    
   
     "background_color": "#ffffff",
     "theme_color": "#ffffff",
   
-    "display": "standalone", 
+    
     
     "icons": [
         {
           "src": "img/icon.png",
           "type": "image/png",
           "sizes": "192x192"
+        }
+        {
+          "src": "img/icon.png",
+          "type": "image/png",
+          "sizes": "512x512"
         }
     ]
   }

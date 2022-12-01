@@ -19,50 +19,44 @@ var URLS = [
   `${GHPATH}/js/app.js`
 ]
 
-// The install handler takes care of precaching the resources we always need.
-self.addEventListener('install', event => {
-    event.waitUntil(
-      caches.open(PRECACHE)
-        .then(cache => cache.addAll(PRECACHE_URLS))
-        .then(self.skipWaiting())
-    );
-  });
-  
-  // The activate handler takes care of cleaning up old caches.
-  self.addEventListener('activate', event => {
-    const currentCaches = [PRECACHE, RUNTIME];
-    event.waitUntil(
-      caches.keys().then(cacheNames => {
-        return cacheNames.filter(cacheName => !currentCaches.includes(cacheName));
-      }).then(cachesToDelete => {
-        return Promise.all(cachesToDelete.map(cacheToDelete => {
-          return caches.delete(cacheToDelete);
-        }));
-      }).then(() => self.clients.claim())
-    );
-  });
-  
-  // The fetch handler serves responses for same-origin resources from a cache.
-  // If no response is found, it populates the runtime cache with the response
-  // from the network before returning it to the page.
-  self.addEventListener('fetch', event => {
-    // Skip cross-origin requests, like those for Google Analytics.
-    if (event.request.url.startsWith(self.location.origin)) {
-      event.respondWith(
-        caches.match(event.request).then(cachedResponse => {
-          if (cachedResponse) {
-            return cachedResponse;
-          }
-  
-          return caches.open(RUNTIME).then(cache => {
-            return fetch(event.request).then(response => {
-              // Put a copy of the response in the runtime cache.
-              return cache.put(event.request, response.clone()).then(() => {
-                return response;
-              });
-            });
-          });
-        })
-      );
-    }
-  });
+var CACHE_NAME = APP_PREFIX + VERSION
+self.addEventListener('fetch', function (e) {
+  console.log('Fetch request : ' + e.request.url);
+  e.respondWith(
+    caches.match(e.request).then(function (request) {
+      if (request) { 
+        console.log('Responding with cache : ' + e.request.url);
+        return request
+      } else {       
+        console.log('File is not cached, fetching : ' + e.request.url);
+        return fetch(e.request)
+      }
+    })
+  )
+})
+
+self.addEventListener('install', function (e) {
+  e.waitUntil(
+    caches.open(CACHE_NAME).then(function (cache) {
+      console.log('Installing cache : ' + CACHE_NAME);
+      return cache.addAll(URLS)
+    })
+  )
+})
+
+self.addEventListener('activate', function (e) {
+  e.waitUntil(
+    caches.keys().then(function (keyList) {
+      var cacheWhitelist = keyList.filter(function (key) {
+        return key.indexOf(APP_PREFIX)
+      })
+      cacheWhitelist.push(CACHE_NAME);
+      return Promise.all(keyList.map(function (key, i) {
+        if (cacheWhitelist.indexOf(key) === -1) {
+          console.log('Deleting cache : ' + keyList[i] );
+          return caches.delete(keyList[i])
+        }
+      }))
+    })
+  )
+})

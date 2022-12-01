@@ -2,10 +2,9 @@
     "name": "The Forge",
     "short_name": "Forge",
  
-    "description": "The Forge Kettlebell APp",
+    "description": "The Forge Kettlebell App",
   
-    "scope": "/laingo93.github.io/",
-    "start_url": "/laingo93.github.io/",
+    "start_url": "/",
   
     "background_color": "#ffffff",
     "theme_color": "#ffffff",
@@ -14,9 +13,9 @@
     
     "icons": [
         {
-          "src": "/laingo93.github.io/img/icon.png",
+          "src": "img/icon.png",
           "type": "image/png",
-          "sizes": "700x700"
+          "sizes": "192x192"
         }
     ]
   }
